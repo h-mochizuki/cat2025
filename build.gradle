@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+version = '0.1'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+application {
+    mainClass = 'cat.Cat'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    archiveFileName = "${rootProject.name}.jar"
+    manifest {
+        // ビルド日時を保持するためのMANIFEST-MFを作成する設定
+        attributes(
+            'Implementation-Title': rootProject.name,
+            'Implementation-Version': version,
+            'Created-By': GradleVersion.current(),
+            'Build-Jdk': JavaVersion.current(),
+            'Build-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSSZ"),
+        )
+    }
+}
+
+startScripts {
+    applicationName = rootProject.name
+}
